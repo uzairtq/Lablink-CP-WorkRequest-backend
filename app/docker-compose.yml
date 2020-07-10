@@ -10,6 +10,11 @@ services:
       - APP_NAME=WorkRequest-backend
     expose:
       - 8080
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
 
   nginx:
     build: ./nginx
@@ -17,3 +22,30 @@ services:
     restart: always
     ports:
       - "8070:8070"
+    depends_on:
+      - flask
+    networks:
+      - frontend
+
+  mongodb:
+    image: mongo:4.0.8
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+      MONGO_INITDB_DATABASE: 'flaskdb'
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - backend
+    
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    
+volumes:
+  mongodbdata:
+    driver: local
