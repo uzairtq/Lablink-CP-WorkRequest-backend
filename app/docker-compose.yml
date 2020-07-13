@@ -13,7 +13,6 @@ services:
     depends_on:
       - mongodb
     networks:
-      - frontend
       - backend
 
   nginx:
@@ -25,7 +24,7 @@ services:
     depends_on:
       - flask
     networks:
-      - frontend
+      - backend
 
   mongodb:
     image: mongo:4.0.8
@@ -41,8 +40,6 @@ services:
       - backend
     
 networks:
-  frontend:
-    driver: bridge
   backend:
     driver: bridge
     
